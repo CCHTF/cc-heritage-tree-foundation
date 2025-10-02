@@ -97,15 +97,29 @@ export default function TreeEntryForm() {
 
     const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
     const maxSize = 8; // MB
+    const maxImages = 3;
+
+    // Check if adding new files would exceed the limit
+    const remainingSlots = maxImages - selectedImages.length;
+    if (remainingSlots <= 0) {
+      alert(`You can only upload a maximum of ${maxImages} images.`);
+      return;
+    }
 
     // Filter valid files
     const validFiles = Array.from(files)
       .filter((file) => validTypes.includes(file.type))
-      .filter((file) => file.size <= maxSize * 1024 * 1024);
+      .filter((file) => file.size <= maxSize * 1024 * 1024)
+      .slice(0, remainingSlots); // Limit to remaining slots
 
     if (validFiles.length === 0) {
-      alert("Only image files (JPEG, PNG, WEBP) under 5MB are allowed.");
+      alert("Only image files (JPEG, PNG, WEBP) under 8MB are allowed.");
       return;
+    }
+
+    // Warn user if some files were excluded due to the limit
+    if (files.length > validFiles.length) {
+      alert(`Only ${validFiles.length} image(s) added. Maximum of ${maxImages} images allowed.`);
     }
 
     // Add new files to state
@@ -1041,7 +1055,7 @@ export default function TreeEntryForm() {
                   Choose Images
                 </Box>
                 <Text fontSize="sm" color="gray.500" mt={2}>
-                  {selectedImages.length} images selected
+                  {selectedImages.length} images selected (max 3)
                 </Text>
               </label>
 
