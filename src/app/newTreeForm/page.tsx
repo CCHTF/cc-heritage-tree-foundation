@@ -96,7 +96,7 @@ export default function TreeEntryForm() {
     if (!files || files.length === 0) return;
 
     const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
-    const maxSize = 5; // MB
+    const maxSize = 8; // MB
 
     // Filter valid files
     const validFiles = Array.from(files)
